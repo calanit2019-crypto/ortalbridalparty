@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>מסיבת הרווקות של אורטל 👰‍♀️💖</title>
     
-    <!-- Google Fonts for premium Hebrew typography -->
+    <!-- Google Fonts for premium Hebrew & English typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght=700&family=Assistant:wght@300;400;600;700;800&family=Great+Vibes&family=Noto+Serif+Hebrew:wght@900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght=700&family=Assistant:wght@300;400;600;700;800&family=Great+Vibes&family=Noto+Serif+Hebrew:wght@900&family=Frank+Ruhl+Libre:wght@700;800;900&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -43,7 +43,8 @@
                     fontFamily: {
                         sans: ['Assistant', 'sans-serif'],
                         hand: ['Amatic SC', 'cursive'],
-                        luxury: ['Great Vibes', 'cursive']
+                        luxury: ['Great Vibes', 'cursive'],
+                        accent: ['Noto Serif Hebrew', 'serif']
                     }
                 }
             }
@@ -124,7 +125,7 @@
                 <span>מסיבת הרווקות של השנה!</span>
             </span>
             
-            <!-- Luxury typography title styled with ultra-bold Noto Serif Hebrew and shiny gradient -->
+            <!-- Luxury typography title styled with ultra-bold English-cursive and shiny gradient -->
             <div class="flex items-center justify-center gap-4 w-full">
                 <!-- Tiny bow on right -->
                 <svg class="w-8 h-8 text-rose-300 hidden sm:block transform -rotate-12" viewBox="0 0 24 24" fill="currentColor">
@@ -149,6 +150,73 @@
 
             <div class="w-32 h-1 bg-gradient-to-r from-transparent via-roseGold to-transparent mx-auto mt-6 rounded-full"></div>
         </header>
+
+        <!-- Live Stream Header -->
+        <div class="flex items-center justify-between mb-6 border-b border-pink-200 pb-3">
+            <h2 class="text-2xl font-bold text-slate-800 flex items-center gap-2">
+                <span>✨ קיר הזיכרונות והברכות שלנו</span>
+                <span class="inline-flex h-3 w-3 relative">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-pink-500"></span>
+                </span>
+            </h2>
+            <div id="photos-counter" class="text-sm font-bold text-roseGold bg-white px-3 py-1 rounded-full shadow-sm">
+                טוען...
+            </div>
+        </div>
+
+        <!-- Empty Gallery Placeholder -->
+        <div id="empty-state" class="hidden bg-white/60 backdrop-blur-sm rounded-3xl p-12 text-center border border-pink-100">
+            <div class="text-pink-300 text-6xl mb-4">📸</div>
+            <h3 class="text-xl font-bold text-slate-700 mb-2">אין עדיין תמונות או ברכות על הקיר!</h3>
+            <p class="text-slate-500 max-w-md mx-auto text-sm">
+                אתן הראשונות! תכתבו ברכה או תעלו תמונה מהמצלמה כדי להיות הראשונות שמשמחות את אורטל.
+            </p>
+        </div>
+
+        <!-- Loading State Spinner -->
+        <div id="loading-spinner" class="py-16 text-center">
+            <div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-rose-300 border-t-roseGold"></div>
+            <p class="text-slate-500 mt-3 text-sm">מתחברת לקיר הזיכרונות של אורטל...</p>
+        </div>
+
+        <!-- Continuous Auto-Rotating Carousel View (The exclusive, clean layout) -->
+        <div id="carousel-view-container" class="relative w-full overflow-hidden py-6 select-none bg-gradient-to-r from-pink-50/50 via-rose-50/80 to-pink-50/50 rounded-3xl p-4 border border-pink-100 mb-10">
+            <!-- Left/Right Slide Overlay Shadows -->
+            <div class="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-rose-50/90 to-transparent z-10 pointer-events-none rounded-l-3xl"></div>
+            <div class="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-rose-50/90 to-transparent z-10 pointer-events-none rounded-r-3xl"></div>
+
+            <div class="overflow-hidden w-full relative h-[360px] flex items-center">
+                <div id="carousel-track" class="carousel-track absolute left-0 flex gap-6 px-12 items-center">
+                    <!-- Dynamic Cards cloned & injected here for continuous loop sliding -->
+                </div>
+            </div>
+
+            <!-- Manual Navigation Controls -->
+            <div class="flex justify-center items-center gap-6 mt-4">
+                <button onclick="slidePrev()" class="w-10 h-10 rounded-full bg-white hover:bg-rose-50 text-roseGold border border-pink-200 flex items-center justify-center shadow-md hover:scale-105 transition-all focus:outline-none">
+                    <i class="fa-solid fa-chevron-right text-sm"></i>
+                </button>
+                <span id="carousel-indicator" class="text-xs font-bold text-roseGold-dark bg-white/80 px-3 py-1 rounded-full shadow-sm">
+                    1 / 1
+                </span>
+                <button onclick="slideNext()" class="w-10 h-10 rounded-full bg-white hover:bg-rose-50 text-roseGold border border-pink-200 flex items-center justify-center shadow-md hover:scale-105 transition-all focus:outline-none">
+                    <i class="fa-solid fa-chevron-left text-sm"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Section Separator for Interactive Posting -->
+        <div class="my-10 text-center relative">
+            <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                <div class="w-full border-t border-pink-200"></div>
+            </div>
+            <div class="relative flex justify-center">
+                <span class="px-6 py-2 bg-gradient-to-r from-rose-50 to-pink-100 rounded-full text-roseGold-dark font-extrabold text-sm sm:text-base shadow-sm border border-pink-100 flex items-center gap-2">
+                    🎀 <span>תוסיפו משהו לקיר של אורטל!</span> 🎀
+                </span>
+            </div>
+        </div>
 
         <!-- Action Control Panel Grid (Split into 3 distinct columns) -->
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-8">
@@ -256,82 +324,6 @@
             <span id="toast-text"></span>
         </div>
 
-        <!-- 📺 View Mode Switcher (Grid vs Auto-Rotating Wheel Carousel) -->
-        <div class="flex justify-center items-center gap-3 mb-8 bg-white/70 backdrop-blur-md p-1.5 rounded-full max-w-md mx-auto shadow-md border border-pink-200">
-            <button id="btn-mode-grid" onclick="switchViewMode('grid')" class="flex-1 py-2.5 px-4 rounded-full text-xs font-bold transition-all duration-300 flex items-center justify-center gap-1.5 bg-roseGold text-white shadow-sm">
-                <i class="fa-solid fa-table-cells"></i>
-                <span>קיר גלריה (רשת)</span>
-            </button>
-            <button id="btn-mode-carousel" onclick="switchViewMode('carousel')" class="flex-1 py-2.5 px-4 rounded-full text-xs font-bold transition-all duration-300 flex items-center justify-center gap-1.5 text-roseGold-dark hover:bg-rose-50/80">
-                <i class="fa-solid fa-circle-notch animate-spin-slow text-[10px]"></i>
-                <span>גלגל מסתובב (לטלוויזיה)</span>
-            </button>
-        </div>
-
-        <!-- Realtime Live Stream Header -->
-        <div class="flex items-center justify-between mb-6 border-b border-pink-200 pb-3">
-            <h2 class="text-2xl font-bold text-slate-800 flex items-center gap-2">
-                <span id="gallery-title-text">✨ הגלריה החיה שלנו</span>
-                <span class="inline-flex h-3 w-3 relative">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-3 w-3 bg-pink-500"></span>
-                </span>
-            </h2>
-            <div id="photos-counter" class="text-sm font-bold text-roseGold bg-white px-3 py-1 rounded-full shadow-sm">
-                טוען...
-            </div>
-        </div>
-
-        <!-- Empty Gallery Placeholder -->
-        <div id="empty-state" class="hidden bg-white/60 backdrop-blur-sm rounded-3xl p-12 text-center border border-pink-100">
-            <div class="text-pink-300 text-6xl mb-4">📸</div>
-            <h3 class="text-xl font-bold text-slate-700 mb-2">אין עדיין תמונות או ברכות על הקיר!</h3>
-            <p class="text-slate-500 max-w-md mx-auto text-sm">
-                אתן הראשונות! תכתבו ברכה או תעלו תמונה מהמצלמה כדי להיות הראשונות שמשמחות את אורטל.
-            </p>
-        </div>
-
-        <!-- Loading State Spinner -->
-        <div id="loading-spinner" class="py-16 text-center">
-            <div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-rose-300 border-t-roseGold"></div>
-            <p class="text-slate-500 mt-3 text-sm">מתחברת לקיר הזיכרונות של אורטל...</p>
-        </div>
-
-        <!-- Mode A: Classic Photo Grid -->
-        <main id="photo-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            <!-- Dynamic Cards injected here in Grid view -->
-        </main>
-
-        <!-- Mode B: Auto-Rotating Wheel Showcase Carousel View (Hidden by default) -->
-        <div id="carousel-view-container" class="hidden relative w-full overflow-hidden py-6 select-none bg-gradient-to-r from-pink-50/50 via-rose-50/80 to-pink-50/50 rounded-3xl p-4 border border-pink-100">
-            <!-- Left/Right Slide Overlay Shadows -->
-            <div class="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-rose-50/90 to-transparent z-10 pointer-events-none rounded-l-3xl"></div>
-            <div class="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-rose-50/90 to-transparent z-10 pointer-events-none rounded-r-3xl"></div>
-
-            <div class="overflow-hidden w-full relative h-[360px] flex items-center">
-                <div id="carousel-track" class="carousel-track absolute left-0 flex gap-6 px-12 items-center">
-                    <!-- Dynamic Cards cloned & injected here for continuous loop sliding -->
-                </div>
-            </div>
-
-            <!-- Manual Navigation Controls -->
-            <div class="flex justify-center items-center gap-6 mt-4">
-                <button onclick="slidePrev()" class="w-10 h-10 rounded-full bg-white hover:bg-rose-50 text-roseGold border border-pink-200 flex items-center justify-center shadow-md hover:scale-105 transition-all focus:outline-none">
-                    <i class="fa-solid fa-chevron-right text-sm"></i>
-                </button>
-                <span id="carousel-indicator" class="text-xs font-bold text-roseGold-dark bg-white/80 px-3 py-1 rounded-full shadow-sm">
-                    1 / 1
-                </span>
-                <button onclick="slideNext()" class="w-10 h-10 rounded-full bg-white hover:bg-rose-50 text-roseGold border border-pink-200 flex items-center justify-center shadow-md hover:scale-105 transition-all focus:outline-none">
-                    <i class="fa-solid fa-chevron-left text-sm"></i>
-                </button>
-            </div>
-            
-            <p class="text-center text-[10px] text-slate-400 mt-2">
-                ✨ גלגל התמונות והברכות מסתובב אוטומטית כל 4 שניות ומציג את השמחה של אורטל!
-            </p>
-        </div>
-
     </div>
 
     <!-- Modal for Full Screen Image/Blessing view -->
@@ -400,8 +392,6 @@
 
         // Initialize App
         async function startApp() {
-            updateConnectionBadge();
-
             if (!useFirebase) {
                 // FALLBACK MODE: Use localStorage so the app works flawlessly out of the box in testing
                 loadLocalGallery();
@@ -413,10 +403,8 @@
                 db = getFirestore(app);
                 auth = getAuth(app);
 
-                // RULE 3 - Authenticate FIRST (Robust error handling for token mismatch)
+                // Safe Authentication Engine with error tolerance boundaries
                 const initAuth = async () => {
-                    // If the user has supplied their own custom config, custom tokens from the host platform cannot be used 
-                    // because they are signed by a different service account. We bypass them and use anonymous auth.
                     if (hasCustomConfig) {
                         await signInAnonymously(auth);
                     } else if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
@@ -512,7 +500,6 @@
         }
 
         function renderGallery(photos) {
-            const grid = document.getElementById('photo-grid');
             const emptyState = document.getElementById('empty-state');
             const spinner = document.getElementById('loading-spinner');
             const counter = document.getElementById('photos-counter');
@@ -522,20 +509,13 @@
 
             if (photos.length === 0) {
                 emptyState.classList.remove('hidden');
-                grid.innerHTML = '';
                 document.getElementById('carousel-view-container').classList.add('hidden');
                 return;
             }
 
             emptyState.classList.add('hidden');
+            document.getElementById('carousel-view-container').classList.remove('hidden');
             
-            // Render grid view
-            grid.innerHTML = '';
-            photos.forEach(photo => {
-                const card = createCardDOM(photo);
-                grid.appendChild(card);
-            });
-
             // Sync Carousel rendering
             renderCarousel(photos);
         }
@@ -544,18 +524,14 @@
         function createCardDOM(photo, isCarouselInstance = false) {
             const card = document.createElement('div');
             const dateLabel = photo.createdAt ? new Date(photo.createdAt).toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'}) : '';
-            const uploaderSafe = photo.uploader.replace(/'/g, "\\'");
-            const captionSafe = (photo.caption || '').replace(/'/g, "\\'");
 
             if (photo.imageUrl) {
                 // PHOTO CARD
-                card.className = isCarouselInstance 
-                    ? "bg-white rounded-2xl shadow-md overflow-hidden border border-pink-100 flex-shrink-0 w-[240px] h-[320px] flex flex-col justify-between transition-all duration-300"
-                    : "bg-white rounded-2xl shadow-md overflow-hidden border border-pink-100 hover:shadow-xl hover:translate-y-[-4px] transition-all duration-300 flex flex-col justify-between";
+                card.className = "bg-white rounded-2xl shadow-md overflow-hidden border border-pink-100 flex-shrink-0 w-[240px] h-[320px] flex flex-col justify-between transition-all duration-300";
                 
                 card.innerHTML = `
                     <div class="relative overflow-hidden cursor-zoom-in flex-1">
-                        <img src="${photo.imageUrl}" class="${isCarouselInstance ? 'h-44' : 'h-64'} w-full object-cover hover:scale-105 transition-all duration-500" alt="תמונה ממסיבת הרווקות">
+                        <img src="${photo.imageUrl}" class="h-44 w-full object-cover hover:scale-105 transition-all duration-500" alt="תמונה ממסיבת הרווקות">
                         <span class="absolute top-2 right-2 bg-slate-900/60 backdrop-blur-md text-white text-[10px] font-semibold px-2 py-1 rounded-full">
                             ${dateLabel}
                         </span>
@@ -572,7 +548,7 @@
                         </div>
                         
                         <div class="flex items-center justify-between border-t border-pink-50 pt-2 mt-2">
-                            <button id="like-btn-${isCarouselInstance ? 'car-' : ''}${photo.id}" class="flex items-center gap-1 text-roseGold hover:text-pink-600 transition-all text-[10px] font-semibold focus:outline-none">
+                            <button id="like-btn-car-${photo.id}" class="flex items-center gap-1 text-roseGold hover:text-pink-600 transition-all text-[10px] font-semibold focus:outline-none">
                                 <span class="bg-rose-50 hover:bg-rose-100 p-1.5 rounded-full transition-all">
                                     <i class="fa-solid fa-heart animate-pulse"></i>
                                 </span>
@@ -590,9 +566,7 @@
 
             } else {
                 // TEXT BLESSING CARD
-                card.className = isCarouselInstance
-                    ? "bg-gradient-to-br from-rose-50 via-pink-50 to-rose-100 rounded-2xl shadow-md p-4 border-2 border-dashed border-pink-200 flex-shrink-0 w-[240px] h-[320px] flex flex-col justify-between cursor-zoom-in"
-                    : "bg-gradient-to-br from-rose-50 via-pink-50 to-rose-100 rounded-2xl shadow-md p-5 border-2 border-dashed border-pink-200 hover:shadow-xl hover:translate-y-[-4px] transition-all duration-300 flex flex-col justify-between min-h-[280px] cursor-zoom-in";
+                card.className = "bg-gradient-to-br from-rose-50 via-pink-50 to-rose-100 rounded-2xl shadow-md p-4 border-2 border-dashed border-pink-200 flex-shrink-0 w-[240px] h-[320px] flex flex-col justify-between cursor-zoom-in";
                 
                 card.innerHTML = `
                     <div class="relative flex-1 flex flex-col justify-between">
@@ -609,7 +583,7 @@
                                 ממני: ${photo.uploader}
                             </h3>
                             <div class="flex items-center justify-center mt-2">
-                                <button id="like-btn-${isCarouselInstance ? 'car-' : ''}${photo.id}" class="flex items-center gap-1 text-roseGold hover:text-pink-600 transition-all text-[10px] font-semibold focus:outline-none">
+                                <button id="like-btn-car-${photo.id}" class="flex items-center gap-1 text-roseGold hover:text-pink-600 transition-all text-[10px] font-semibold focus:outline-none">
                                     <span class="bg-white/80 p-1.5 rounded-full shadow-sm">
                                         <i class="fa-solid fa-heart"></i>
                                     </span>
@@ -655,6 +629,7 @@
 
             carouselIndex = 0;
             updateCarouselPosition();
+            startCarouselAutoPlay();
         }
 
         window.slidePrev = function() {
@@ -674,6 +649,7 @@
         function updateCarouselPosition() {
             const track = document.getElementById('carousel-track');
             const indicator = document.getElementById('carousel-indicator');
+            if (!track) return;
             const cards = track.children;
             if (!cards || cards.length === 0) return;
 
@@ -701,11 +677,16 @@
 
         function startCarouselAutoPlay() {
             stopCarouselAutoPlay();
+            
+            // Check if device is mobile to trigger 1.5s ultra-fast speed, desktop stays at 4s
+            const isMobile = window.innerWidth < 768;
+            const delayTime = isMobile ? 1500 : 4000;
+
             carouselInterval = setInterval(() => {
                 if (!window.cachedPhotos || window.cachedPhotos.length === 0) return;
                 carouselIndex = (carouselIndex + 1) % window.cachedPhotos.length;
                 updateCarouselPosition();
-            }, 4000); // rotates automatically every 4 seconds
+            }, delayTime);
         }
 
         function stopCarouselAutoPlay() {
@@ -717,42 +698,6 @@
 
         function resetCarouselTimer() {
             startCarouselAutoPlay();
-        }
-
-        // Expose view mode switches to window
-        window.switchViewMode = function(mode) {
-            const gridView = document.getElementById('photo-grid');
-            const carouselView = document.getElementById('carousel-view-container');
-            const btnGrid = document.getElementById('btn-mode-grid');
-            const btnCarousel = document.getElementById('btn-mode-carousel');
-            const galleryTitleText = document.getElementById('gallery-title-text');
-
-            if (mode === 'grid') {
-                // Classic Grid Mode
-                gridView.classList.remove('hidden');
-                gridView.classList.add('grid');
-                carouselView.classList.add('hidden');
-                
-                btnGrid.className = "flex-1 py-2.5 px-4 rounded-full text-xs font-bold transition-all duration-300 flex items-center justify-center gap-1.5 bg-roseGold text-white shadow-sm";
-                btnCarousel.className = "flex-1 py-2.5 px-4 rounded-full text-xs font-bold transition-all duration-300 flex items-center justify-center gap-1.5 text-roseGold-dark hover:bg-rose-50/80";
-                galleryTitleText.innerText = "✨ הגלריה החיה שלנו";
-                stopCarouselAutoPlay();
-            } else {
-                // Rotating Carousel Mode
-                gridView.classList.add('hidden');
-                gridView.classList.remove('grid');
-                carouselView.classList.remove('hidden');
-                
-                btnGrid.className = "flex-1 py-2.5 px-4 rounded-full text-xs font-bold transition-all duration-300 flex items-center justify-center gap-1.5 text-roseGold-dark hover:bg-rose-50/80";
-                btnCarousel.className = "flex-1 py-2.5 px-4 rounded-full text-xs font-bold transition-all duration-300 flex items-center justify-center gap-1.5 bg-roseGold text-white shadow-sm";
-                galleryTitleText.innerText = "🔄 גלגל התמונות והברכות מסתובב";
-                
-                // Trigger resizing calculation and start auto-scroller
-                setTimeout(() => {
-                    updateCarouselPosition();
-                    startCarouselAutoPlay();
-                }, 100);
-            }
         }
 
         // Camera direct capture handler
@@ -788,7 +733,8 @@
 
             showToast("📸 מעבדת את התמונה... רגע אחד", "info");
 
-            compressImage(file, 600, 600, 0.6, async (compressedBase64) => {
+            // Aggressive resize/compress (400x400 at 0.4 quality) to bypass Firestore size limit rules flawlessly
+            compressImage(file, 400, 400, 0.4, async (compressedBase64) => {
                 const caption = document.getElementById('photo-caption').value.trim();
 
                 if (useFirebase) {
@@ -809,7 +755,7 @@
 
                     } catch (err) {
                         console.error("Firestore upload failed: ", err);
-                        showToast("❌ שגיאה בהעלאת התמונה לשרת", "error");
+                        showToast("❌ שגיאה בהעלאת התמונה לשרת. בדקי את הרשאות ה-Firestore ב-Google Console (Test Mode)", "error");
                     }
                 } else {
                     try {
@@ -883,7 +829,7 @@
                     showToast("🌸 הברכה שלך נשמרה והופיעה על הקיר!", "success");
                 } catch (err) {
                     console.error("Firestore text upload failed: ", err);
-                    showToast("❌ שגיאה בשמירת הברכה", "error");
+                    showToast("❌ שגיאה בשמירת הברכה. בדקי הרשאות ב-Google Console", "error");
                 }
             } else {
                 try {
