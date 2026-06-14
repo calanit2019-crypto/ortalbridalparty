@@ -8,7 +8,7 @@
     <!-- Google Fonts for premium Hebrew typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Assistant:wght@300;400;600;700;800&family=Great+Vibes&family=Noto+Serif+Hebrew:wght@900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght=700&family=Assistant:wght@300;400;600;700;800&family=Great+Vibes&family=Noto+Serif+Hebrew:wght@900&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -69,6 +69,25 @@
         }
         .animate-bow-sway {
             animation: bowSway 4s ease-in-out infinite;
+        }
+        /* Rotating Wheel / Carousel Transition Animation */
+        .carousel-track {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            will-change: transform;
+        }
+        .carousel-card-active {
+            transform: scale(1.05);
+            box-shadow: 0 20px 35px rgba(183, 110, 121, 0.3);
+            border-color: #b76e79;
+            z-index: 20;
+        }
+        .animate-spin-slow {
+            animation: spin 12s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -237,10 +256,22 @@
             <span id="toast-text"></span>
         </div>
 
+        <!-- 📺 View Mode Switcher (Grid vs Auto-Rotating Wheel Carousel) -->
+        <div class="flex justify-center items-center gap-3 mb-8 bg-white/70 backdrop-blur-md p-1.5 rounded-full max-w-md mx-auto shadow-md border border-pink-200">
+            <button id="btn-mode-grid" onclick="switchViewMode('grid')" class="flex-1 py-2.5 px-4 rounded-full text-xs font-bold transition-all duration-300 flex items-center justify-center gap-1.5 bg-roseGold text-white shadow-sm">
+                <i class="fa-solid fa-table-cells"></i>
+                <span>קיר גלריה (רשת)</span>
+            </button>
+            <button id="btn-mode-carousel" onclick="switchViewMode('carousel')" class="flex-1 py-2.5 px-4 rounded-full text-xs font-bold transition-all duration-300 flex items-center justify-center gap-1.5 text-roseGold-dark hover:bg-rose-50/80">
+                <i class="fa-solid fa-circle-notch animate-spin-slow text-[10px]"></i>
+                <span>גלגל מסתובב (לטלוויזיה)</span>
+            </button>
+        </div>
+
         <!-- Realtime Live Stream Header -->
         <div class="flex items-center justify-between mb-6 border-b border-pink-200 pb-3">
             <h2 class="text-2xl font-bold text-slate-800 flex items-center gap-2">
-                <span>✨ הגלריה החיה שלנו</span>
+                <span id="gallery-title-text">✨ הגלריה החיה שלנו</span>
                 <span class="inline-flex h-3 w-3 relative">
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-3 w-3 bg-pink-500"></span>
@@ -266,10 +297,40 @@
             <p class="text-slate-500 mt-3 text-sm">מתחברת לקיר הזיכרונות של אורטל...</p>
         </div>
 
-        <!-- Main Photo/Blessing Stream Grid -->
+        <!-- Mode A: Classic Photo Grid -->
         <main id="photo-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            <!-- Dynamic Photo/Blessing Cards will be injected here -->
+            <!-- Dynamic Cards injected here in Grid view -->
         </main>
+
+        <!-- Mode B: Auto-Rotating Wheel Showcase Carousel View (Hidden by default) -->
+        <div id="carousel-view-container" class="hidden relative w-full overflow-hidden py-6 select-none bg-gradient-to-r from-pink-50/50 via-rose-50/80 to-pink-50/50 rounded-3xl p-4 border border-pink-100">
+            <!-- Left/Right Slide Overlay Shadows -->
+            <div class="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-rose-50/90 to-transparent z-10 pointer-events-none rounded-l-3xl"></div>
+            <div class="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-rose-50/90 to-transparent z-10 pointer-events-none rounded-r-3xl"></div>
+
+            <div class="overflow-hidden w-full relative h-[360px] flex items-center">
+                <div id="carousel-track" class="carousel-track absolute left-0 flex gap-6 px-12 items-center">
+                    <!-- Dynamic Cards cloned & injected here for continuous loop sliding -->
+                </div>
+            </div>
+
+            <!-- Manual Navigation Controls -->
+            <div class="flex justify-center items-center gap-6 mt-4">
+                <button onclick="slidePrev()" class="w-10 h-10 rounded-full bg-white hover:bg-rose-50 text-roseGold border border-pink-200 flex items-center justify-center shadow-md hover:scale-105 transition-all focus:outline-none">
+                    <i class="fa-solid fa-chevron-right text-sm"></i>
+                </button>
+                <span id="carousel-indicator" class="text-xs font-bold text-roseGold-dark bg-white/80 px-3 py-1 rounded-full shadow-sm">
+                    1 / 1
+                </span>
+                <button onclick="slideNext()" class="w-10 h-10 rounded-full bg-white hover:bg-rose-50 text-roseGold border border-pink-200 flex items-center justify-center shadow-md hover:scale-105 transition-all focus:outline-none">
+                    <i class="fa-solid fa-chevron-left text-sm"></i>
+                </button>
+            </div>
+            
+            <p class="text-center text-[10px] text-slate-400 mt-2">
+                ✨ גלגל התמונות והברכות מסתובב אוטומטית כל 4 שניות ומציג את השמחה של אורטל!
+            </p>
+        </div>
 
     </div>
 
@@ -300,7 +361,6 @@
         // =========================================================================
         // ⚙️ הגדרות פרויקט ה-FIREBASE שלך (ענן בזמן אמת)
         // =========================================================================
-        // מפתחות פרויקט ה-Firebase האמיתיים והאישיים שלך:
         const myCustomFirebaseConfig = {
             apiKey: "AIzaSyCkLsC-BWd6GHF2Ds2ijF78oo5onGUP3n4",
             authDomain: "ortal-bridal-party.firebaseapp.com",
@@ -311,9 +371,7 @@
             measurementId: "G-0XX6RKVFL0"
         };
 
-        // בדיקה אם המשתמש הזין הגדרות משלו
         const hasCustomConfig = myCustomFirebaseConfig.apiKey && myCustomFirebaseConfig.apiKey !== "YOUR_API_KEY_HERE";
-
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'ortals-bridal-party';
         
         let firebaseConfig = null;
@@ -329,21 +387,21 @@
             }
         }
 
-        // Determine if we have live Firebase credentials
         const useFirebase = (firebaseConfig && firebaseConfig.apiKey) ? true : false;
 
         // State variables
         let app, db, auth;
         let currentUser = null;
-        let cachedPhotos = [];
 
         // Dynamic QR code generation pointing to the exact current URL of this landing page
-        const currentUrl = window.location.href;
+        const currentUrl = "https://calanit2019-crypto.github.io/ortalbridalparty/";
         const qrCodeImg = document.getElementById('qr-code-img');
         qrCodeImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(currentUrl)}&color=b76e79&bgcolor=ffffff`;
 
         // Initialize App
         async function startApp() {
+            updateConnectionBadge();
+
             if (!useFirebase) {
                 // FALLBACK MODE: Use localStorage so the app works flawlessly out of the box in testing
                 loadLocalGallery();
@@ -355,10 +413,19 @@
                 db = getFirestore(app);
                 auth = getAuth(app);
 
-                // Authenticate FIRST
+                // RULE 3 - Authenticate FIRST (Robust error handling for token mismatch)
                 const initAuth = async () => {
-                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                        await signInWithCustomToken(auth, __initial_auth_token);
+                    // If the user has supplied their own custom config, custom tokens from the host platform cannot be used 
+                    // because they are signed by a different service account. We bypass them and use anonymous auth.
+                    if (hasCustomConfig) {
+                        await signInAnonymously(auth);
+                    } else if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        try {
+                            await signInWithCustomToken(auth, __initial_auth_token);
+                        } catch (tokenErr) {
+                            console.warn("Custom token auth mismatch/failure, falling back to anonymous auth:", tokenErr);
+                            await signInAnonymously(auth);
+                        }
                     } else {
                         await signInAnonymously(auth);
                     }
@@ -395,10 +462,9 @@
                     photos.push({ id: doc.id, ...doc.data() });
                 });
 
-                // Client-side sorting (newest first)
                 photos.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
                 
-                cachedPhotos = photos;
+                window.cachedPhotos = photos;
                 renderGallery(photos);
             }, (error) => {
                 console.error("Firestore onSnapshot error: ", error);
@@ -408,13 +474,9 @@
 
         // Local Storage Mode Handlers
         function loadLocalGallery() {
-            // Hide loading spinner
             document.getElementById('loading-spinner').classList.add('hidden');
-            
-            // Fetch cached local photos or supply pre-loaded beautiful dummy cards if empty
             let localPhotos = JSON.parse(localStorage.getItem('bridal_photos_local') || '[]');
             
-            // Pre-populate if this is the very first time testing so the user sees something stunning
             if (localPhotos.length === 0) {
                 localPhotos = [
                     {
@@ -445,7 +507,7 @@
                 localStorage.setItem('bridal_photos_local', JSON.stringify(localPhotos));
             }
             
-            cachedPhotos = localPhotos;
+            window.cachedPhotos = localPhotos;
             renderGallery(localPhotos);
         }
 
@@ -455,111 +517,242 @@
             const spinner = document.getElementById('loading-spinner');
             const counter = document.getElementById('photos-counter');
 
-            // Hide loading spinner
             spinner.classList.add('hidden');
-
             counter.innerText = `📸 ${photos.length} פוסטים בקיר`;
 
             if (photos.length === 0) {
                 emptyState.classList.remove('hidden');
                 grid.innerHTML = '';
+                document.getElementById('carousel-view-container').classList.add('hidden');
                 return;
             }
 
             emptyState.classList.add('hidden');
+            
+            // Render grid view
             grid.innerHTML = '';
-
             photos.forEach(photo => {
-                const card = document.createElement('div');
-                const dateLabel = photo.createdAt ? new Date(photo.createdAt).toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'}) : '';
+                const card = createCardDOM(photo);
+                grid.appendChild(card);
+            });
 
-                if (photo.imageUrl) {
-                    // PHOTO CARD
-                    card.className = "bg-white rounded-2xl shadow-md overflow-hidden border border-pink-100 hover:shadow-xl hover:translate-y-[-4px] transition-all duration-300 flex flex-col justify-between";
-                    
-                    card.innerHTML = `
-                        <div class="relative overflow-hidden cursor-zoom-in" id="zoom-trigger-${photo.id}">
-                            <img src="${photo.imageUrl}" class="w-full h-64 object-cover hover:scale-105 transition-all duration-500" alt="תמונה ממסיבת הרווקות">
-                            <span class="absolute top-2 right-2 bg-slate-900/60 backdrop-blur-md text-white text-[10px] font-semibold px-2 py-1 rounded-full">
-                                ${dateLabel}
-                            </span>
+            // Sync Carousel rendering
+            renderCarousel(photos);
+        }
+
+        // Card DOM Generator Helper
+        function createCardDOM(photo, isCarouselInstance = false) {
+            const card = document.createElement('div');
+            const dateLabel = photo.createdAt ? new Date(photo.createdAt).toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'}) : '';
+            const uploaderSafe = photo.uploader.replace(/'/g, "\\'");
+            const captionSafe = (photo.caption || '').replace(/'/g, "\\'");
+
+            if (photo.imageUrl) {
+                // PHOTO CARD
+                card.className = isCarouselInstance 
+                    ? "bg-white rounded-2xl shadow-md overflow-hidden border border-pink-100 flex-shrink-0 w-[240px] h-[320px] flex flex-col justify-between transition-all duration-300"
+                    : "bg-white rounded-2xl shadow-md overflow-hidden border border-pink-100 hover:shadow-xl hover:translate-y-[-4px] transition-all duration-300 flex flex-col justify-between";
+                
+                card.innerHTML = `
+                    <div class="relative overflow-hidden cursor-zoom-in flex-1">
+                        <img src="${photo.imageUrl}" class="${isCarouselInstance ? 'h-44' : 'h-64'} w-full object-cover hover:scale-105 transition-all duration-500" alt="תמונה ממסיבת הרווקות">
+                        <span class="absolute top-2 right-2 bg-slate-900/60 backdrop-blur-md text-white text-[10px] font-semibold px-2 py-1 rounded-full">
+                            ${dateLabel}
+                        </span>
+                    </div>
+                    <div class="p-3.5 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-xs flex items-center gap-1.5">
+                                <span class="text-roseGold-dark"><i class="fa-solid fa-circle-user text-[10px]"></i></span>
+                                ${photo.uploader}
+                            </h3>
+                            <p class="text-[11px] text-slate-600 mt-1 font-medium italic text-right line-clamp-2">
+                                ${photo.caption ? `"${photo.caption}"` : ''}
+                            </p>
                         </div>
-                        <div class="p-4 flex-1 flex flex-col justify-between">
-                            <div>
-                                <div class="flex items-center justify-between">
-                                    <h3 class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
-                                        <span class="text-roseGold-dark"><i class="fa-solid fa-circle-user text-xs"></i></span>
-                                        ${photo.uploader}
-                                    </h3>
-                                </div>
-                                <p class="text-xs text-slate-600 mt-1.5 font-medium min-h-[1.5rem] italic text-right whitespace-pre-line">
-                                    ${photo.caption ? `"${photo.caption}"` : ''}
-                                </p>
-                            </div>
-                            
-                            <!-- Actions panel (Likes) -->
-                            <div class="flex items-center justify-between border-t border-pink-50 pt-2.5 mt-3">
-                                <button id="like-btn-${photo.id}" class="flex items-center gap-1.5 text-roseGold hover:text-pink-600 transition-all text-xs font-semibold focus:outline-none">
-                                    <span class="bg-rose-50 hover:bg-rose-100 p-1.5 rounded-full transition-all">
-                                        <i class="fa-solid fa-heart animate-pulse"></i>
+                        
+                        <div class="flex items-center justify-between border-t border-pink-50 pt-2 mt-2">
+                            <button id="like-btn-${isCarouselInstance ? 'car-' : ''}${photo.id}" class="flex items-center gap-1 text-roseGold hover:text-pink-600 transition-all text-[10px] font-semibold focus:outline-none">
+                                <span class="bg-rose-50 hover:bg-rose-100 p-1.5 rounded-full transition-all">
+                                    <i class="fa-solid fa-heart animate-pulse"></i>
+                                </span>
+                                <span>${photo.likes || 0} פרגונים</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                // Modal triggers
+                const imageArea = card.querySelector('.cursor-zoom-in');
+                imageArea.addEventListener('click', () => {
+                    zoomImage(photo.imageUrl, photo.uploader, photo.caption || '');
+                });
+
+            } else {
+                // TEXT BLESSING CARD
+                card.className = isCarouselInstance
+                    ? "bg-gradient-to-br from-rose-50 via-pink-50 to-rose-100 rounded-2xl shadow-md p-4 border-2 border-dashed border-pink-200 flex-shrink-0 w-[240px] h-[320px] flex flex-col justify-between cursor-zoom-in"
+                    : "bg-gradient-to-br from-rose-50 via-pink-50 to-rose-100 rounded-2xl shadow-md p-5 border-2 border-dashed border-pink-200 hover:shadow-xl hover:translate-y-[-4px] transition-all duration-300 flex flex-col justify-between min-h-[280px] cursor-zoom-in";
+                
+                card.innerHTML = `
+                    <div class="relative flex-1 flex flex-col justify-between">
+                        <div class="absolute -top-1 -right-1 text-[10px] text-roseGold/60 font-semibold">${dateLabel}</div>
+                        <div class="text-center pt-3 flex-1 flex flex-col justify-center">
+                            <div class="text-roseGold-dark text-lg mb-2"><i class="fa-solid fa-envelope-open-text opacity-80"></i></div>
+                            <p class="text-xs font-semibold text-slate-700 leading-relaxed text-center px-1 line-clamp-5 whitespace-pre-line">
+                                "${photo.caption}"
+                            </p>
+                        </div>
+                        <div class="border-t border-pink-200 pt-2 mt-3 text-center">
+                            <h3 class="font-bold text-roseGold-dark text-[10px] flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-heart text-pink-400 text-[9px]"></i>
+                                ממני: ${photo.uploader}
+                            </h3>
+                            <div class="flex items-center justify-center mt-2">
+                                <button id="like-btn-${isCarouselInstance ? 'car-' : ''}${photo.id}" class="flex items-center gap-1 text-roseGold hover:text-pink-600 transition-all text-[10px] font-semibold focus:outline-none">
+                                    <span class="bg-white/80 p-1.5 rounded-full shadow-sm">
+                                        <i class="fa-solid fa-heart"></i>
                                     </span>
                                     <span>${photo.likes || 0} פרגונים</span>
                                 </button>
                             </div>
                         </div>
-                    `;
-                    grid.appendChild(card);
+                    </div>
+                `;
 
-                    // Add Event Listeners safely avoiding quote problems
-                    document.getElementById(`zoom-trigger-${photo.id}`).addEventListener('click', () => {
-                        zoomImage(photo.imageUrl, photo.uploader, photo.caption || '');
-                    });
-                    document.getElementById(`like-btn-${photo.id}`).addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        likePhoto(photo.id);
-                    });
-
-                } else {
-                    // TEXT BLESSING CARD (No Photo)
-                    card.className = "bg-gradient-to-br from-rose-50 via-pink-50 to-rose-100 rounded-2xl shadow-md p-5 border-2 border-dashed border-pink-200 hover:shadow-xl hover:translate-y-[-4px] transition-all duration-300 flex flex-col justify-between min-h-[280px] cursor-zoom-in";
-                    
-                    card.innerHTML = `
-                        <div class="relative flex-1 flex flex-col justify-between">
-                            <div class="absolute -top-1 -right-1 text-xs text-roseGold/60 font-semibold">${dateLabel}</div>
-                            <div class="text-center pt-4">
-                                <div class="text-roseGold-dark text-xl mb-3"><i class="fa-solid fa-envelope-open-text opacity-80 animate-pulse"></i></div>
-                                <p class="text-sm font-semibold text-slate-700 leading-relaxed text-center px-1 whitespace-pre-line max-h-[130px] overflow-hidden overflow-ellipsis">
-                                    "${photo.caption}"
-                                </p>
-                            </div>
-                            <div class="border-t border-pink-200 pt-3 mt-4 text-center">
-                                <h3 class="font-bold text-roseGold-dark text-xs flex items-center justify-center gap-1">
-                                    <i class="fa-solid fa-heart text-pink-400 text-[10px]"></i>
-                                    ממני: ${photo.uploader}
-                                </h3>
-                                <div class="flex items-center justify-center mt-3">
-                                    <button id="like-btn-${photo.id}" class="flex items-center gap-1.5 text-roseGold hover:text-pink-600 transition-all text-xs font-semibold focus:outline-none">
-                                        <span class="bg-white/80 p-1.5 rounded-full shadow-sm">
-                                            <i class="fa-solid fa-heart"></i>
-                                        </span>
-                                        <span>${photo.likes || 0} פרגונים</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    grid.appendChild(card);
-
-                    // Add Event Listeners safely avoiding quote problems
-                    card.addEventListener('click', () => {
+                card.addEventListener('click', (e) => {
+                    if (!e.target.closest('button')) {
                         zoomImage('', photo.uploader, photo.caption);
-                    });
-                    document.getElementById(`like-btn-${photo.id}`).addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        likePhoto(photo.id);
-                    });
-                }
+                    }
+                });
+            }
+
+            // Safe double bind of Like button inside card
+            const likeBtn = card.querySelector(`[id^="like-btn-"]`);
+            if (likeBtn) {
+                likeBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    likePhoto(photo.id);
+                });
+            }
+
+            return card;
+        }
+
+        let carouselIndex = 0;
+        let carouselInterval = null;
+
+        function renderCarousel(photos) {
+            const track = document.getElementById('carousel-track');
+            if (!track) return;
+            track.innerHTML = '';
+
+            // We inject cards into the carousel view
+            photos.forEach(photo => {
+                const card = createCardDOM(photo, true);
+                track.appendChild(card);
             });
+
+            carouselIndex = 0;
+            updateCarouselPosition();
+        }
+
+        window.slidePrev = function() {
+            if (!window.cachedPhotos || window.cachedPhotos.length === 0) return;
+            resetCarouselTimer();
+            carouselIndex = (carouselIndex - 1 + window.cachedPhotos.length) % window.cachedPhotos.length;
+            updateCarouselPosition();
+        }
+
+        window.slideNext = function() {
+            if (!window.cachedPhotos || window.cachedPhotos.length === 0) return;
+            resetCarouselTimer();
+            carouselIndex = (carouselIndex + 1) % window.cachedPhotos.length;
+            updateCarouselPosition();
+        }
+
+        function updateCarouselPosition() {
+            const track = document.getElementById('carousel-track');
+            const indicator = document.getElementById('carousel-indicator');
+            const cards = track.children;
+            if (!cards || cards.length === 0) return;
+
+            const cardWidth = 240; // width of card
+            const gap = 24; // gap of Tailwind (gap-6 = 24px)
+            const trackContainerWidth = track.parentElement.clientWidth;
+
+            // Calculate center translation offset
+            const activeCardOffset = (trackContainerWidth / 2) - (cardWidth / 2);
+            const translation = activeCardOffset - (carouselIndex * (cardWidth + gap));
+
+            track.style.transform = `translateX(${translation}px)`;
+
+            // Toggle Highlight active class
+            for (let i = 0; i < cards.length; i++) {
+                if (i === carouselIndex) {
+                    cards[i].classList.add('carousel-card-active', 'border-2', 'ring-4', 'ring-pink-300/30');
+                } else {
+                    cards[i].classList.remove('carousel-card-active', 'border-2', 'ring-4', 'ring-pink-300/30');
+                }
+            }
+
+            indicator.innerText = `${carouselIndex + 1} / ${window.cachedPhotos.length}`;
+        }
+
+        function startCarouselAutoPlay() {
+            stopCarouselAutoPlay();
+            carouselInterval = setInterval(() => {
+                if (!window.cachedPhotos || window.cachedPhotos.length === 0) return;
+                carouselIndex = (carouselIndex + 1) % window.cachedPhotos.length;
+                updateCarouselPosition();
+            }, 4000); // rotates automatically every 4 seconds
+        }
+
+        function stopCarouselAutoPlay() {
+            if (carouselInterval) {
+                clearInterval(carouselInterval);
+                carouselInterval = null;
+            }
+        }
+
+        function resetCarouselTimer() {
+            startCarouselAutoPlay();
+        }
+
+        // Expose view mode switches to window
+        window.switchViewMode = function(mode) {
+            const gridView = document.getElementById('photo-grid');
+            const carouselView = document.getElementById('carousel-view-container');
+            const btnGrid = document.getElementById('btn-mode-grid');
+            const btnCarousel = document.getElementById('btn-mode-carousel');
+            const galleryTitleText = document.getElementById('gallery-title-text');
+
+            if (mode === 'grid') {
+                // Classic Grid Mode
+                gridView.classList.remove('hidden');
+                gridView.classList.add('grid');
+                carouselView.classList.add('hidden');
+                
+                btnGrid.className = "flex-1 py-2.5 px-4 rounded-full text-xs font-bold transition-all duration-300 flex items-center justify-center gap-1.5 bg-roseGold text-white shadow-sm";
+                btnCarousel.className = "flex-1 py-2.5 px-4 rounded-full text-xs font-bold transition-all duration-300 flex items-center justify-center gap-1.5 text-roseGold-dark hover:bg-rose-50/80";
+                galleryTitleText.innerText = "✨ הגלריה החיה שלנו";
+                stopCarouselAutoPlay();
+            } else {
+                // Rotating Carousel Mode
+                gridView.classList.add('hidden');
+                gridView.classList.remove('grid');
+                carouselView.classList.remove('hidden');
+                
+                btnGrid.className = "flex-1 py-2.5 px-4 rounded-full text-xs font-bold transition-all duration-300 flex items-center justify-center gap-1.5 text-roseGold-dark hover:bg-rose-50/80";
+                btnCarousel.className = "flex-1 py-2.5 px-4 rounded-full text-xs font-bold transition-all duration-300 flex items-center justify-center gap-1.5 bg-roseGold text-white shadow-sm";
+                galleryTitleText.innerText = "🔄 גלגל התמונות והברכות מסתובב";
+                
+                // Trigger resizing calculation and start auto-scroller
+                setTimeout(() => {
+                    updateCarouselPosition();
+                    startCarouselAutoPlay();
+                }, 100);
+            }
         }
 
         // Camera direct capture handler
@@ -595,7 +788,6 @@
 
             showToast("📸 מעבדת את התמונה... רגע אחד", "info");
 
-            // Client-side Resize & Compress of Mobile image (60% JPEG Quality)
             compressImage(file, 600, 600, 0.6, async (compressedBase64) => {
                 const caption = document.getElementById('photo-caption').value.trim();
 
@@ -620,7 +812,6 @@
                         showToast("❌ שגיאה בהעלאת התמונה לשרת", "error");
                     }
                 } else {
-                    // Local Storage Save fallback
                     try {
                         const localPhotos = JSON.parse(localStorage.getItem('bridal_photos_local') || '[]');
                         const newPhoto = {
@@ -635,12 +826,13 @@
                         localStorage.setItem('bridal_photos_local', JSON.stringify(localPhotos));
                         
                         document.getElementById('photo-caption').value = '';
+                        window.cachedPhotos = localPhotos;
                         renderGallery(localPhotos);
                         triggerUploadConfetti();
                         showToast("🌸 סימולציה מקומית: התמונה נוספה בהצלחה לקיר!", "success");
                     } catch (e) {
                         console.error("Local storage error:", e);
-                        showToast("❌ קובץ התמונה גדול מדי עבור זיכרון הדפנפן. נסי תמונה קטנה יותר", "error");
+                        showToast("❌ קובץ התמונה גדול מדי עבור זיכרון הדפדפן. נסי תמונה קטנה יותר", "error");
                     }
                 }
             });
@@ -694,7 +886,6 @@
                     showToast("❌ שגיאה בשמירת הברכה", "error");
                 }
             } else {
-                // Local Storage Save fallback
                 try {
                     const localPhotos = JSON.parse(localStorage.getItem('bridal_photos_local') || '[]');
                     const newPhoto = {
@@ -709,6 +900,7 @@
                     localStorage.setItem('bridal_photos_local', JSON.stringify(localPhotos));
                     
                     captionInput.value = '';
+                    window.cachedPhotos = localPhotos;
                     renderGallery(localPhotos);
                     triggerUploadConfetti();
                     showToast("🌸 סימולציה: הברכה נוספה בהצלחה לקיר של אורטל!", "success");
@@ -770,12 +962,12 @@
                     showToast("❌ שגיאה ברישום הלייק", "error");
                 }
             } else {
-                // Local fallback update
                 const localPhotos = JSON.parse(localStorage.getItem('bridal_photos_local') || '[]');
                 const photoIndex = localPhotos.findIndex(p => p.id === photoId);
                 if (photoIndex !== -1) {
                     localPhotos[photoIndex].likes = (localPhotos[photoIndex].likes || 0) + 1;
                     localStorage.setItem('bridal_photos_local', JSON.stringify(localPhotos));
+                    window.cachedPhotos = localPhotos;
                     renderGallery(localPhotos);
                     triggerLikeConfetti();
                 }
@@ -791,7 +983,6 @@
             });
         }
 
-        // Trigger celebratory confetti burst on successful post
         function triggerUploadConfetti() {
             const count = 180;
             const defaults = {
@@ -830,7 +1021,14 @@
             });
         }
 
-        // Start initialization sequence
+        // Redraw/Realign carousel on window resize
+        window.addEventListener('resize', () => {
+            const carouselView = document.getElementById('carousel-view-container');
+            if (carouselView && !carouselView.classList.contains('hidden')) {
+                updateCarouselPosition();
+            }
+        });
+
         startApp();
     </script>
 
@@ -864,7 +1062,7 @@
         // Copy Share Link (using document.execCommand fallback as mandated)
         function copyPageLink() {
             const dummy = document.createElement('input');
-            const text = window.location.href;
+            const text = "https://calanit2019-crypto.github.io/ortalbridalparty/";
             
             document.body.appendChild(dummy);
             dummy.value = text;
